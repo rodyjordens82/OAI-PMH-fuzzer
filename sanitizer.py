@@ -27,9 +27,7 @@ file_handler.setFormatter(formatter)
 LOGGER.addHandler(file_handler)
 
 # Constants
-#DEFAULT_TARGET_URL = os.getenv("TARGET_URL", "https://tnov6-oai.vakliteratuur.info/OaiPmh") # x-ref
-#DEFAULT_TARGET_URL = os.getenv("TARGET_URL", "http://islandora.io/oai/request") # islandora
-DEFAULT_TARGET_URL = os.getenv("TARGET_URL", "http://localhost:8080/server/oai/request") # dspace
+#DEFAULT_TARGET_URL = os.getenv("TARGET_URL", "YOUR_OAI_PMH_URL_HERE") # The target OAI-PMH endpoint
 DEFAULT_PORT = int(os.getenv("SANITIZER_PORT", 8090))
 PAYLOADS_DIR = os.getenv("PAYLOADS_DIR", "payloads")
 

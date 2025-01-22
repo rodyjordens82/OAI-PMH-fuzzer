@@ -32,9 +32,7 @@ with open(server_info_log, 'w') as f:
     f.write('uuid,timestamp,http_status_code,request_url,response_time,http_version,headers\n')
 
 # OAI-PMH endpoint
-#OAI_PMH_URL = "https://tnov6-oai.vakliteratuur.info/OaiPmh" #use for just fuzzing x-ref
-#OAI_PMH_URL = "http://localhost:8080/server/oai/request" #use for just fuzzing dspace
-#OAI_PMH_URL = "http://islandora.io/oai/request" #use for just fuzzing islandora
+#OAI_PMH_URL = "YOUR_ENDPOINT_HERE"
 OAI_PMH_URL = "http://localhost:8090/oai/request" #use in combination with sanitizer
 
 # OAI-PMH verbs
