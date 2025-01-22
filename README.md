@@ -67,12 +67,14 @@ The Fuzzer generates requests, logs responses, and analyzes results.
 If you want to filter and secure input before it is sent to an OAI-PMH endpoint, use the Sanitizer as a proxy. This setup is intended as a starting point to protect the OAI-PMH endpoint and/or gain insight into how the endpoint handles malicious input. The log files provide detailed information on request handling.
 
 1.  Start the Sanitizer server:
+
     ```bash
     python3 sanitizer.py
     ```
 The server runs on http://localhost:8081.
 
 2.  Configure the Fuzzer to send requests to the Sanitizer server and then start the Fuzzer:
+
     ```bash
     python3 fuzzer.py
     ```
