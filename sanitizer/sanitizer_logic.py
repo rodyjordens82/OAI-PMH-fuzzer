@@ -17,6 +17,7 @@ PAYLOADS_DIR = os.getenv("PAYLOADS_DIR", "payloads")
 
 # Statistics counters
 blocked_request_counter = Counter()
+forwarded_request_counter = Counter()  
 
 def load_payloads():
     """Loads payloads from all text files in the payloads directory."""
@@ -78,9 +79,19 @@ def sanitize_params(params):
 
         sanitized[key] = value
 
+    # Log valid requests if not blocked
+    if not block_request:
+        forwarded_request_counter["Forwarded Requests"] += 1
+        LOGGER.info(f"Request sanitized and valid: {sanitized}")
+
     return sanitized, block_request
 
 def log_blocked_requests():
     """Logs the total number of blocked requests due to malicious content."""
     for reason, count in blocked_request_counter.items():
         LOGGER.info(f"Blocked {count} requests due to: {reason}")
+
+def log_forwarded_requests():
+    """Logs the total number of forwarded requests."""
+    for reason, count in forwarded_request_counter.items():
+        LOGGER.info(f"Forwarded {count} requests.")

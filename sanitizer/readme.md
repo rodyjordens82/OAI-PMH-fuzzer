@@ -33,7 +33,7 @@ sanitizer/
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/rodyjordens82/OAI-PMH-fuzzer.git
    cd sanitizer
    ```
 
@@ -82,7 +82,7 @@ Expected response:
 Test the sanitization functionality by sending a POST request with example data:
 
 ```bash
-curl -X POST http://localhost:5000/sanitize -H "Content-Type: application/json" -d '{"verb": "Identify", "identifier": "test<script>alert(1)</script>"}'
+Invoke-RestMethod -Uri "http://localhost:5000/sanitize" -Method POST -Headers @{ "Content-Type" = "application/json" } -Body '{"verb": "Identify", "identifier": "test<script>alert(1)</script>"}'
 ```
 
 Expected response:

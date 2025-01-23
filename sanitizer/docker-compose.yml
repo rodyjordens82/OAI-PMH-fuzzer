@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  sanitizer:
+    image: sanitizer
+    build:
+      context: .
+    environment:
+      TARGET_URL: "http://your-oai-pmh-endpoint/oai"
+    ports:
+      - "8090:8090"
