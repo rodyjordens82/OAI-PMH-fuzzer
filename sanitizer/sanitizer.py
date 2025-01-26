@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from typing import Dict
 import httpx
-from sanitizer_logic import sanitize_params, load_payloads, log_blocked_requests
+from sanitizer_logic import sanitize_params, load_payloads, log_blocked_requests, calculate_efficiency_metrics
 import os
 import logging
 
@@ -22,7 +22,7 @@ forwarded_log_handler.setFormatter(forwarded_log_formatter)
 LOGGER.addHandler(forwarded_log_handler)
 
 # Load target OAI-PMH endpoint
-TARGET_URL = os.getenv("TARGET_URL", "http://host.docker.internal:8080/server/oai")  # Replace with your endpoint
+TARGET_URL = os.getenv("TARGET_URL", "http://host.docker.internal:8080/server/oai")
 
 app = FastAPI()
 
@@ -64,6 +64,7 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    """Log blocked requests before shutting down."""
+    """Log metrics and blocked requests before shutting down."""
     LOGGER.info("Shutting down the sanitizer application")
     log_blocked_requests()
+    calculate_efficiency_metrics()

@@ -1,13 +1,11 @@
 import random
-import string
 import httpx
 import logging
 import os
-import threading
-from datetime import datetime
-from collections import Counter
 import statistics
 import uuid
+from datetime import datetime
+from collections import Counter
 
 # Configure logging
 logging.basicConfig(
@@ -28,7 +26,7 @@ with open(server_info_log, 'w') as f:
     f.write('uuid,timestamp,http_status_code,request_url,response_time,http_version,headers\n')
 
 # OAI-PMH endpoint
-OAI_PMH_URL = "http://localhost:5000/sanitize"  # Use in combination with the sanitizer
+OAI_PMH_URL = "http://localhost:5000/sanitize"
 
 # OAI-PMH verbs
 OAI_PMH_VERBS = ["Identify", "ListMetadataFormats", "ListSets", "ListIdentifiers", "ListRecords", "GetRecord"]
@@ -36,12 +34,12 @@ OAI_PMH_VERBS = ["Identify", "ListMetadataFormats", "ListSets", "ListIdentifiers
 # Payloads directory
 PAYLOADS_DIR = "payloads"
 
-# Counter for HTTP status codes and versions
+# Counter for HTTP status codes and statistics
 status_code_counter = Counter()
 http_version_counter = Counter()
-
-# Response times storage
 response_times = []
+blocked_requests = 0
+forwarded_requests = 0
 
 def load_payloads_by_file():
     """Loads payloads grouped by file from the payloads directory."""
@@ -60,6 +58,7 @@ def load_payloads_by_file():
 PAYLOAD_FILES = load_payloads_by_file()
 
 def generate_fuzzed_params(verb, payload):
+    """Generates fuzzed parameters for OAI-PMH requests."""
     params = {"verb": verb}
     if verb == "GetRecord":
         params["identifier"] = payload
@@ -84,12 +83,19 @@ def generate_fuzzed_params(verb, payload):
 
 def log_status_code(request_uuid, status_code, url, response_time, http_version):
     """Logs HTTP status codes to a separate file."""
+    global blocked_requests, forwarded_requests
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     with open(status_code_log, 'a') as f:
         f.write(f"{request_uuid},{timestamp},{status_code},{url},{response_time:.2f} ms,{http_version}\n")
     status_code_counter[status_code] += 1
     http_version_counter[http_version] += 1
     response_times.append(response_time)
+
+    # Increment blocked or forwarded counters based on status code
+    if status_code == 403:  # Assuming 403 indicates blocked requests
+        blocked_requests += 1
+    else:
+        forwarded_requests += 1
 
 def log_server_info(request_uuid, url, headers, status_code, response_time, http_version):
     """Logs server information to a separate file."""
@@ -100,16 +106,28 @@ def log_server_info(request_uuid, url, headers, status_code, response_time, http
 
 def summarize_status_codes():
     """Summarizes the status codes and writes to the status code log."""
+    global blocked_requests, forwarded_requests
+    total_requests = sum(status_code_counter.values())
+    median_response_time = statistics.median(response_times) if response_times else 0
+
     with open(status_code_log, 'a') as f:
-        total_requests = sum(status_code_counter.values())
         f.write("\nSummary:\n")
         f.write(f"Total requests: {total_requests}\n")
-        f.write(f"Median response time: {statistics.median(response_times):.2f} ms\n")
+        f.write(f"Blocked requests: {blocked_requests}\n")
+        f.write(f"Forwarded requests: {forwarded_requests}\n")
+        f.write(f"Median response time: {median_response_time:.2f} ms\n")
         f.write(f"HTTP/1.1 requests: {http_version_counter['HTTP/1.1']}x\n")
         for status_code, count in status_code_counter.items():
             f.write(f"{status_code}: {count}x\n")
 
+    # Log efficiency metrics
+    logging.info("Efficiency Metrics:")
+    logging.info(f"Blocked Requests: {blocked_requests}")
+    logging.info(f"Forwarded Requests: {forwarded_requests}")
+    logging.info(f"Median Response Time: {median_response_time:.2f} ms")
+
 def fuzz_oai_pmh_with_payloads():
+    """Fuzzes the OAI-PMH endpoint with generated payloads."""
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
     for filename, payloads in PAYLOAD_FILES.items():
