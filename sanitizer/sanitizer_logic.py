@@ -6,11 +6,12 @@ from collections import Counter
 # Configure logging
 LOGGER = logging.getLogger("oai_sanitizer")
 LOGGER.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("oai_sanitizer.log")
-file_handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-file_handler.setFormatter(formatter)
-LOGGER.addHandler(file_handler)
+
+# File handler for blocked requests
+blocked_log_handler = logging.FileHandler("/app/logs/blocked_requests.log")
+blocked_log_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+blocked_log_handler.setFormatter(blocked_log_formatter)
+LOGGER.addHandler(blocked_log_handler)
 
 # Constants
 PAYLOADS_DIR = os.getenv("PAYLOADS_DIR", "payloads")

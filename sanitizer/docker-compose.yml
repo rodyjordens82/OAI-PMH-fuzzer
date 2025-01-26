@@ -5,6 +5,8 @@ services:
     build:
       context: .
     environment:
-      TARGET_URL: "http://your-oai-pmh-endpoint/oai"
+      TARGET_URL: "http://host.docker.internal:8080/server/oai/request"
     ports:
-      - "8090:8090"
+      - "5000:5000"
+    volumes:
+      - ./logs:/app/logs  # Bind mount the "logs" folder on your laptop to "/app/logs" in the container

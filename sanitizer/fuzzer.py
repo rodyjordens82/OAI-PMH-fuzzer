@@ -1,7 +1,3 @@
-# During the development of the artifacts, generative AI was used
-# to refine the code and generate comments in the code with explanations.
-# The OpenAI models ChatGPT4o and 01 were utilized for this purpose.
-
 import random
 import string
 import httpx
@@ -32,8 +28,7 @@ with open(server_info_log, 'w') as f:
     f.write('uuid,timestamp,http_status_code,request_url,response_time,http_version,headers\n')
 
 # OAI-PMH endpoint
-#OAI_PMH_URL = "YOUR_ENDPOINT_HERE"
-OAI_PMH_URL = "http://localhost:8090/oai/request" #use in combination with sanitizer
+OAI_PMH_URL = "http://localhost:5000/sanitize"  # Use in combination with the sanitizer
 
 # OAI-PMH verbs
 OAI_PMH_VERBS = ["Identify", "ListMetadataFormats", "ListSets", "ListIdentifiers", "ListRecords", "GetRecord"]
@@ -115,7 +110,7 @@ def summarize_status_codes():
             f.write(f"{status_code}: {count}x\n")
 
 def fuzz_oai_pmh_with_payloads():
-    headers = {"Content-Type": "application/xml", "Accept": "application/xml"}
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
     for filename, payloads in PAYLOAD_FILES.items():
         logging.info(f"Fuzzing with payloads from: {filename}")
@@ -130,7 +125,8 @@ def fuzz_oai_pmh_with_payloads():
                 with httpx.Client(transport=transport) as client:
                     try:
                         start_time = datetime.now()
-                        response = client.get(OAI_PMH_URL, params=params, headers=headers)
+                        # Send POST request instead of GET
+                        response = client.post(OAI_PMH_URL, json=params, headers=headers)
                         end_time = datetime.now()
 
                         response_time = (end_time - start_time).total_seconds() * 1000  # Convert to milliseconds
