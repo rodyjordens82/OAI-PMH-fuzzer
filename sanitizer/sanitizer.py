@@ -22,7 +22,7 @@ forwarded_log_handler.setFormatter(forwarded_log_formatter)
 LOGGER.addHandler(forwarded_log_handler)
 
 # Load target OAI-PMH endpoint
-TARGET_URL = os.getenv("TARGET_URL", "http://host.docker.internal:8080/server/oai")
+TARGET_URL = os.getenv("TARGET_URL", "http://islandora.io/oai/request")
 
 app = FastAPI()
 

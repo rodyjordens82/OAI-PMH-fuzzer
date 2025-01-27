@@ -26,7 +26,8 @@ with open(server_info_log, 'w') as f:
     f.write('uuid,timestamp,http_status_code,request_url,response_time,http_version,headers\n')
 
 # OAI-PMH endpoint
-OAI_PMH_URL = "http://localhost:5000/sanitize"
+#OAI_PMH_URL = "http://localhost:5000/sanitize"
+OAI_PMH_URL = "http://islandora.io/oai/request"
 
 # OAI-PMH verbs
 OAI_PMH_VERBS = ["Identify", "ListMetadataFormats", "ListSets", "ListIdentifiers", "ListRecords", "GetRecord"]

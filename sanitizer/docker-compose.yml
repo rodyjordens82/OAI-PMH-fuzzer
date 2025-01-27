@@ -5,8 +5,16 @@ services:
     build:
       context: .
     environment:
-      TARGET_URL: "http://host.docker.internal:8080/server/oai/request"
+      TARGET_URL: "http://islandora.io/oai/request"
+    networks:
+      shared_network:
+        aliases:
+          - islandora.io
     ports:
       - "5000:5000"
     volumes:
       - ./logs:/app/logs  # Bind mount the "logs" folder on your laptop to "/app/logs" in the container
+
+networks:
+  shared_network:
+    external: true
