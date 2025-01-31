@@ -32,8 +32,8 @@ with open(server_info_log, 'w') as f:
     f.write('uuid,timestamp,http_status_code,request_url,response_time,http_version,headers\n')
 
 # OAI-PMH endpoint
-#OAI_PMH_URL = "YOUR_ENDPOINT_HERE"
-OAI_PMH_URL = "http://localhost:8090/oai/request" #use in combination with sanitizer
+OAI_PMH_URL = "http://islandora.io/oai/request"
+#OAI_PMH_URL = "http://localhost:8080/server/oai/request" #use in combination with sanitizer
 
 # OAI-PMH verbs
 OAI_PMH_VERBS = ["Identify", "ListMetadataFormats", "ListSets", "ListIdentifiers", "ListRecords", "GetRecord"]

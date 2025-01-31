@@ -14,7 +14,6 @@ services:
       - "5000:5000"
     volumes:
       - ./logs:/app/logs  # Bind mount the "logs" folder on your laptop to "/app/logs" in the container
-
 networks:
   shared_network:
     external: true
